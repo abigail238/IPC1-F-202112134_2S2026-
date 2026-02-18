@@ -1,0 +1,83 @@
+# =========================
+# NetBeans
+# =========================
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!build/*.jar
+
+# Archivos generados por NetBeans
+nbproject/private/
+nbproject/private/private.properties
+nbproject/private/private.xml
+nbproject/private/config.properties
+
+# =========================
+# Compilación Java
+# =========================
+*.class
+
+# Logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.swp
+*.bak
+*~
+
+# =========================
+# Maven
+# =========================
+/target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+
+# =========================
+# Gradle
+# =========================
+.gradle/
+build/
+
+# =========================
+# IDEs adicionales
+# =========================
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# =========================
+# Sistema Operativo
+# =========================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Mac
+.DS_Store
+
+# Linux
+*~
+
+# =========================
+# Archivos JAR generados
+# =========================
+*.jar
+!libs/*.jar
