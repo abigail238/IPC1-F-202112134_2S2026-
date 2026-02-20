@@ -17,6 +17,15 @@ public class Practica1 {
     private static final String premio_especial = "$";
     private static final String pared = "X";
     private static final String pacman = "<";
+    // El historial 
+    //maximo de partidas que se guardaron
+    private static final int MAX_PARTIDAS = 100;
+    private static String[] historialUsuario = new String [MAX_PARTIDAS];
+    private static int[] historialPuntos = new int [MAX_PARTIDAS];
+    private static int historialSize =0; // cuantas partidas llevamos guardadas 
+    
+    
+            
     
     // sc para leer lo que escribimos 
     private static Scanner sc = new Scanner(System.in);
@@ -27,15 +36,19 @@ public class Practica1 {
     public static void main(String [] args){
         
         System.out.println("Bienvenido a pacman:");
-        int opcionInicio;
+        int opcionInicio =0;
+        
+        //necesito que se repita el menu hasta que elijan 3
+         while (opcionInicio != 3) {
     
         System.out.println("Elija las opciones");
         System.out.println("Elija 1 para crear el tablero");
         System.out.println("elija 2 para ver los puntos");
         System.out.println("Elija 3 para salir");
-        
+           
         opcionInicio = sc.nextInt();
         opcionElegida(opcionInicio);
+    }
 
         System.out.println("Gracias por jugar PAC-MAN :)");
         
@@ -50,6 +63,10 @@ public class Practica1 {
         
         switch (opcionInicio) {
                 case 1:
+                    // Ingresar nombre del jugado 
+                    System.out.println("Ingrese su nombre: ");
+                    String usuario = sc.next();
+                    
                     System.out.println("Elija tipo el tipo de tablero (P= pequeno, G= grande): ");
                     String tipo = sc.next().toUpperCase();
                     
@@ -123,6 +140,8 @@ public class Practica1 {
                     tablero[personajeFila-1][personajeColumna-1] = "<";
                     imprimirTablero(tablero, filas, columnas);
                     
+                    int puntos =0; // esta variable nos va servir para agu
+                    
                     // loop del juego :)
                     int pacFila = personajeFila -1;
                     int pacColumna = personajeColumna -1; // aqui guardamos donde esta actualmente el pacman
@@ -155,28 +174,51 @@ public class Practica1 {
                             default: 
                                 System.out.println("Movimiento no valido.");
                                 continue;
+                                
+              
                         }
+                        
                         if(nuevaFila <0) nuevaFila =filas-1;
                         if (nuevaFila >= filas) nuevaFila =0;
-                        if(nuevaColumna < 0) nuevaColumna = nuevaColumna - 1;
+                        if(nuevaColumna < 0) nuevaColumna = columnas - 1;
                         if(nuevaColumna >= columnas) nuevaColumna = 0;
                         
                         //no tiene que pasar paredes 
                         if(tablero[nuevaFila][nuevaColumna].equals(pared)){
                             System.out.println("Hay pared no puede pasar");
                             continue;
-                        }
+}
+                            
+                           if(tablero[nuevaFila][nuevaColumna].equals(premio)) {
+                               puntos +=10;
+                               System.out.println("Ganaste 10 puntos");
+                           }
+                           
+                           // premio especial 
+                           if(tablero[nuevaFila][nuevaColumna].equals(premio_especial)){
+                            puntos +=15;
+                               System.out.println("Ganaste 15 puntos");
+                               
+                        } // para el tablero actualizado y lo imprima
+                        tablero[pacFila][pacColumna]="";
+                      
+                        pacFila = nuevaFila;
+                        pacColumna = nuevaColumna;
+                        
+                        tablero [pacFila][pacColumna] = pacman;
+                        
+                        imprimirTablero(tablero, filas,columnas);
+                        System.out.println("Puntos actuales: " + puntos);
                         
                     }
                     
-                    // esto es un cambio para probar git
-                    
-                    
-                    
-
+                    guardarHistorial(usuario, puntos);
+                        System.out.println("Partida guardada en historial");
+         
                     break;
                 case 2:
-                    //TODO: IMPLEMENTAR SECCION DE PUNTOS
+                    //IMPLEMENTAR SECCION DE PUNTOS
+                    mostrarHistorial();
                     break;
                 case 3:
                     // TODO: IMPLEMENTAR SALIR
@@ -191,23 +233,23 @@ public class Practica1 {
 
         // Borde superior
         for (int j = 0; j < columnas + 2; j++) {
-            System.out.print("--");
+            System.out.print("---");
         }
         System.out.println();
 
         // Filas del tablero
-        for (int i = 0; i < filas; i++) {
-            System.out.print("|");
-
+        for (int i = 0; i < filas; i++){ 
+             System.out.print("|");
+            
             for (int j = 0; j < columnas; j++) {
-                System.out.print(tablero[i][j] + " ");
+                System.out.print( tablero[i][j] + " ");
             }
 
             System.out.println("|");
         }
 
         // Borde inferior
-        for (int j = 0; j < columnas + 2; j++) {
+        for (int j = 0; j < columnas +2; j++) {
             System.out.print("--");
         }
         System.out.println();
@@ -259,8 +301,31 @@ public class Practica1 {
                 colocados++;
             }
         }
+        
     }
-
+ public static void guardarHistorial(String usuario, int puntos){
+     // vamos a verificar si ya se lleno el arreglo 
+     if (historialSize >=MAX_PARTIDAS){
+         System.out.println("Historial lleno.");
+         
+         return; // si esta lleno sale del metodo
+     }
+     historialUsuario[historialSize]= usuario; // guarda el nombre
+     historialPuntos[historialSize]= puntos; // guarda los putnos 
+     historialSize++; //aqui aumenta el contador para la siguiente partida
+ }
+ public static void mostrarHistorial(){
+     
+     System.out.println("Historial de partidas");
+     
+     if(historialSize == 0){ // si nadie ha jugado entonces no hay nada que mostras ;)
+         System.out.println("No hay partidas guardadas.");
+         return;
+     }
+     for(int i = historialSize-1; i>=0; i--){ //muestra el historial del mas reciente a mas antiguo
+        System.out.println("Jugador: " + historialUsuario[i] + " | Puntos: " + historialPuntos[i]);
+     }
+ }
 }
 
     
