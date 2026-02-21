@@ -60,6 +60,7 @@ public class Practica1 {
             int numeroPremios;
             int numeroParedes;
             int numeroTrampas;
+            
         
         switch (opcionInicio) {
                 case 1:
@@ -91,7 +92,7 @@ public class Practica1 {
                     numeroParedes = asignarCantidades("paredes",0.2, filas, columnas);
                     
                     //Asigna trampas 20%
-                    numeroTrampas = asignarCantidades("fantasmas",0.4, filas, columnas);
+                    numeroTrampas = asignarCantidades("fantasmas",0.2, filas, columnas);
                     
                     System.out.println("Creando tablero...");
                     
@@ -142,9 +143,14 @@ public class Practica1 {
                     
                     int puntos =0; // esta variable nos va servir para agu
                     
+                    //El jugador inicia con 3 vidas 
+                    int vidas =3;
+                        int premiosRestantes = numeroPremios;
+                        
                     // loop del juego :)
                     int pacFila = personajeFila -1;
                     int pacColumna = personajeColumna -1; // aqui guardamos donde esta actualmente el pacman
+
                     
                     boolean jugando = true; // mientras el juego sea true sontinuara 
                     
@@ -188,16 +194,38 @@ public class Practica1 {
                             System.out.println("Hay pared no puede pasar");
                             continue;
 }
-                            
+                            //verificar premio simple
                            if(tablero[nuevaFila][nuevaColumna].equals(premio)) {
-                               puntos +=10;
+                               puntos +=10; 
+                               premiosRestantes--;//reduce contador
                                System.out.println("Ganaste 10 puntos");
+                               tablero[nuevaFila][nuevaColumna]= " "; // borra el premio 
                            }
+                               //verificar si en la nueva poscion hay @ fantasmas
+                               if(tablero[nuevaFila][nuevaColumna].equals(fantasma)){
+                                   vidas--;// resta una vida
+                                   System.out.println("Perdiste un vida");
+                                   tablero[nuevaFila][nuevaColumna]= " "; //borra el fantasma 
+                               }
+                               //vamos a verificar si el jugador perdio todas las vidas 
+                               if(vidas==0){
+                                   System.out.println("GAME OVER");
+                                   jugando = false; //termina el juego
+                                 }
+
+                               // verificamos si el jugador recogio todo los premios 
+                               if(premiosRestantes==0){
+                                   System.out.println("FELICIDADES GANASTE :)");
+                                   jugando = false;
+                               }
+                           
                            
                            // premio especial 
                            if(tablero[nuevaFila][nuevaColumna].equals(premio_especial)){
                             puntos +=15;
-                               System.out.println("Ganaste 15 puntos");
+                            premiosRestantes--; //redice condador de premios
+                             System.out.println("Ganaste 15 puntos");
+                             tablero[nuevaFila][nuevaColumna]= " "; // borrar el premio especial
                                
                         } // para el tablero actualizado y lo imprima
                         tablero[pacFila][pacColumna]="";
@@ -209,6 +237,7 @@ public class Practica1 {
                         
                         imprimirTablero(tablero, filas,columnas);
                         System.out.println("Puntos actuales: " + puntos);
+                       
                         
                     }
                     
@@ -326,6 +355,9 @@ public class Practica1 {
         System.out.println("Jugador: " + historialUsuario[i] + " | Puntos: " + historialPuntos[i]);
      }
  }
+  
+ 
 }
+
 
     
